@@ -19,6 +19,41 @@
 // STEP 5: Use console.log to print ALL three values in one message.
 //         Example idea: "My name is ___, I am ___ years old, and my favorite color is ___."
 
+let firstName = "Hanna";
+
+let age = 30;
+
+let favoriteColor = "White";
+
+console.log(firstName);
+console.log(age);
+console.log(
+  `My name is ${firstName},
+   I am ${age} years old,
+and my favorite color is ${favoriteColor}`,
+);
+
+console.log(
+  "My name is " +
+    firstName +
+    ", I am " +
+    age +
+    " years old, and my favorite color is " +
+    favoriteColor +
+    ".",
+);
+
+console.log(
+  "My name is " +
+    firstName +
+    "\n, I am " +
+    age +
+    " years old," +
+    "\nand my favorite color is" +
+    favoriteColor +
+    ".",
+);
+
 // ==============================================
 // TASK 2 – REASSIGNMENT WITH let
 // ==============================================
@@ -34,6 +69,14 @@
 // STEP 9: Use console.log to print a new message:
 //         "Now, my favorite color is ___."
 
+let currentColor = "blue";
+
+console.log(`at first, my favorite color was, ${currentColor}`);
+
+currentColor = "purple";
+
+console.log(`Now, My favorite color is ${currentColor}`);
+
 // ==============================================
 // TASK 3 – SENTENCE WITH TEMPLATE LITERALS
 // ==============================================
@@ -48,6 +91,14 @@
 //          Store this in a variable called introduction.
 
 // STEP 13: console.log() the introduction variable to see your message.
+
+var personName = "SeongJin";
+
+var personAge = 30;
+
+var introduction = `Hi, my name is ${personName} and I am ${personAge} years old.`;
+
+console.log(introduction);
 
 // ==============================================
 // TASK 4 – let VS const
@@ -68,3 +119,16 @@
 //          in another line of code.
 //          Hint: This should cause an error in the console.
 //          (This shows that const cannot be reassigned.)
+
+let mood = "happy";
+
+console.log(mood);
+
+mood = "sad";
+
+console.log(mood);
+
+const birthYear = 1998;
+console.log(birthYear);
+
+birthYear = 2026;

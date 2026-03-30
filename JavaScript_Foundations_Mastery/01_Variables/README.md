@@ -146,7 +146,7 @@ score = 20; // Error
 Objects with const CAN change internally:
 
 ```js
-const user = { name: "Ana" };
+const user = { name: "Ana", Age: 33 };
 user.name = "Max"; // Allowed
 ```
 
