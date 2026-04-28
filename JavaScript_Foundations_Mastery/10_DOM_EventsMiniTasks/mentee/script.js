@@ -11,11 +11,30 @@
 //         - The mood select (id "moodSelect")
 //         - The reset button (id "resetProfileBtn")
 
+const profileNameDisplay = document.querySelector("#profileNameDisplay");
+const profileMoodDisplay = document.querySelector("#profileMoodDisplay");
+
+const nameInput = document.querySelector("#nameInput");
+const colorValueText = document.querySelector("#colorValueText");
+const colorInput = document.querySelector("#colorInput");
+const moodSelect = document.querySelector("#moodSelect");
+const resetProfileBtn = document.getElementById("resetProfileBtn");
+
 // STEP 2: Add an "input" event listener to the name input.
 //         Inside the listener:
 //         - Read the current input value.
 //         - If it's empty, set the display name to "Your Name".
 //         - Otherwise, set the display name to the typed value.
+
+nameInput.addEventListener("input", () => {
+  const typedFullName = nameInput.value;
+
+  if (typedFullName === "") {
+    profileNameDisplay.textContent = "Your Name";
+  } else {
+    profileNameDisplay.textContent = typedFullName;
+  }
+});
 
 // STEP 3: Add an "input" event listener to the color input.
 //         Inside the listener:
@@ -25,11 +44,26 @@
 //         (Optional) You can later also change the text color itself,
 //         but for now just update the text.
 
+colorInput.addEventListener("input", () => {
+  const typeFavColor = colorInput.value;
+
+  if (typeFavColor === "") {
+    colorValueText.textContent = "You Favorite Color";
+  } else {
+    colorValueText.textContent = typeFavColor;
+  }
+});
+
 // STEP 4: Add a "change" event listener to the mood select.
 //         Inside the listener:
 //         - Read the selected value.
 //         - Update the mood line text to say, for example:
 //           "Current mood: happy" (using the selected value).
+
+moodSelect.addEventListener("change", () => {
+  const selectedValue = moodSelect.value;
+  profileMoodDisplay.textContent = `Current mood: ${selectedValue}`;
+});
 
 // STEP 5: Add a "click" event listener to the reset button.
 //         Inside the listener:
@@ -38,3 +72,12 @@
 //         - Reset the display name to "Your Name".
 //         - Reset the favorite color text to "none yet".
 //         - Reset the mood line text to "Current mood: neutral".
+resetProfileBtn.addEventListener("click", () => {
+  nameInput.value = "";
+  colorInput.value = "";
+  moodSelect.value = "neutral";
+
+  profileNameDisplay.textContent = "";
+  colorValueText.textContent = "";
+  profileMoodDisplay.textContent = "";
+});
