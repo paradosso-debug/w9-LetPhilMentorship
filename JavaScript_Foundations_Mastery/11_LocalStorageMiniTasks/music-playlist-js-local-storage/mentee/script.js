@@ -2,6 +2,8 @@
 // Each song will be an object with { title, artist, mood, link }
 //  Declare a variable named "playlist" and set it to an empty array
 
+let playlist = [];
+
 //  Step 2: Get references to all the DOM elements (HTML elements we interact with)
 //  Use document.getElementById() to store references to:
 // - title input        → id="title"
@@ -14,6 +16,19 @@
 // - shuffle button     → id="shuffleBtn"
 // - dark mode button   → id="toggleModeBtn"
 
+const titleInput = document.getElementById("title");
+const artistInput = document.getElementById("artist");
+
+const linkInput = document.getElementById("link");
+const moodDropdown = document.getElementById("mood");
+
+const form = document.getElementById("form");
+const playlistContainer = document.getElementById("playlist");
+
+const filterMood = document.getElementById("filterMood");
+const shuffleBtn = document.getElementById("shuffleBtn");
+const toggleModeBtn = document.getElementById("toggleModeBtn");
+
 // Step 3: Function to load the playlist from localStorage
 //  Define a function called loadPlaylist()
 // Inside the function:
@@ -21,11 +36,24 @@
 // - If there is data, parse it using JSON.parse()
 // - Then update the playlist array with the parsed data
 
+function loadPlaylist() {
+  const saved = localStorage.getItem("customPlaylist");
+  if (saved) {
+    playlist = JSON.parse(saved);
+  } else {
+    console.log("No playlist found in localStorage");
+  }
+}
+
 //  Step 4: Function to save the playlist into localStorage
 //  Define a function called savePlaylist()
 // Inside the function:
 // - Use JSON.stringify() to convert the playlist array to a string
 // - Use localStorage.setItem() to save it with the key "customPlaylist"
+
+function savePlaylist() {
+  localStorage.setItem("customPlaylist", JSON.stringify(playlist));
+}
 
 //  Step 5: Function to render the songs onto the screen
 //  Define a function called renderPlaylist(songsToRender)
@@ -44,6 +72,22 @@
   <button class="delete-btn" data-index="${index}">🗑️ Delete</button>
 */
 
+function renderPlaylist(songsToRender) {
+  playlistContainer.innerHTML = "";
+
+  songsToRender.foreach((song, index) => {
+    const card = document.createElement("div");
+    card.classList.add("song-card");
+    card.innerHTML = `<strong>${song.title}</strong><br>
+  <em>Artist:</em> ${song.artist}<br>
+  <em>Mood:</em> ${song.mood}<br>
+  <a href="${song.link}" target="_blank">🎧 Listen</a><br>
+  <button class="delete-btn" data-index="${index}">🗑️ Delete</button>`;
+
+    playlistContainer.appendChild(card);
+  });
+}
+
 // - 4. Append the new div to the playlist container
 
 //  Then, after the forEach loop:
@@ -52,6 +96,17 @@
 // -   → Get the song index from data-index
 // -   → Remove the song from the playlist array using splice()
 // -   → Save and re-render the playlist again
+
+const deleteBtns = document.querySelectorAll(".delete-btn");
+
+deleteBtns.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    const index = this.getAttribute("data-index");
+    playlist.splice(index, 1);
+    savePlaylist();
+    renderPlaylist(playlist);
+  });
+});
 
 // - Step 6: Function to handle adding a new song
 // - Define a function called addSong(e)
