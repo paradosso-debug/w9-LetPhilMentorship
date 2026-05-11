@@ -74,17 +74,30 @@ function savePlaylist() {
 
 function renderPlaylist(songsToRender) {
   playlistContainer.innerHTML = "";
-
-  songsToRender.foreach((song, index) => {
+  console.log("Rendering playlist", songsToRender);
+  songsToRender.forEach((song, index) => {
     const card = document.createElement("div");
     card.classList.add("song-card");
-    card.innerHTML = `<strong>${song.title}</strong><br>
+
+    card.innerHTML = `
+    <strong>${song.title}</strong><br>
   <em>Artist:</em> ${song.artist}<br>
   <em>Mood:</em> ${song.mood}<br>
   <a href="${song.link}" target="_blank">🎧 Listen</a><br>
   <button class="delete-btn" data-index="${index}">🗑️ Delete</button>`;
 
     playlistContainer.appendChild(card);
+  });
+
+  const deleteBtns = document.querySelectorAll(".delete-btn");
+
+  deleteBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const index = this.getAttribute("data-index");
+      playlist.splice(index, 1);
+      savePlaylist();
+      renderPlaylist(playlist);
+    });
   });
 }
 
@@ -97,17 +110,6 @@ function renderPlaylist(songsToRender) {
 // -   → Remove the song from the playlist array using splice()
 // -   → Save and re-render the playlist again
 
-const deleteBtns = document.querySelectorAll(".delete-btn");
-
-deleteBtns.forEach((btn) => {
-  btn.addEventListener("click", function () {
-    const index = this.getAttribute("data-index");
-    playlist.splice(index, 1);
-    savePlaylist();
-    renderPlaylist(playlist);
-  });
-});
-
 // - Step 6: Function to handle adding a new song
 // - Define a function called addSong(e)
 // Inside the function:
@@ -118,6 +120,21 @@ deleteBtns.forEach((btn) => {
 // - Call renderPlaylist(playlist)
 // - Use songForm.reset() to clear the form
 
+function addSong(e) {
+  e.preventDefault();
+  let song = {
+    title: titleInput.value.trim(),
+    artist: artistInput.value.trim(),
+    mood: moodDropdown.value,
+    link: linkInput.value.trim(),
+  };
+
+  playlist.push(song);
+  savePlaylist();
+  renderPlaylist(playlist);
+  form.reset();
+}
+
 // - Step 7: Filter playlist by mood
 // - Define a function called filterPlaylist()
 // Inside the function:
@@ -125,6 +142,16 @@ deleteBtns.forEach((btn) => {
 // - If it’s "all", call renderPlaylist(playlist)
 // - Otherwise, use .filter() to get only songs that match the mood
 // - Then call renderPlaylist(filtered)
+
+function filterPlaylist() {
+  const selectedMood = filterMood.value;
+  if (selectedMood === "all") {
+    renderPlaylist(playlist);
+  } else {
+    const filtered = playlist.filter((song) => song.mood === selectedMood);
+    renderPlaylist(filtered);
+  }
+}
 
 // - Step 8: Shuffle the playlist using Fisher-Yates algorithm
 // - Define a function called shufflePlaylist()
@@ -134,6 +161,15 @@ deleteBtns.forEach((btn) => {
 // - Swap playlist[i] and playlist[j] using destructuring
 // - After the loop, save and render the playlist again
 
+function shufflePlaylist() {
+  for (let i = playlist.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [playlist[i], playlist[j]] = [playlist[j], playlist[i]];
+  }
+  savePlaylist();
+  renderPlaylist(playlist);
+}
+
 // - Step 9: Toggle between Dark Mode and Light Mode
 // - Define a function called toggleDarkMode()
 // Inside the function:
@@ -142,21 +178,47 @@ deleteBtns.forEach((btn) => {
 // - Update toggle button text accordingly ("Light Mode" or "Dark Mode")
 // - Save the theme preference in localStorage (key = "theme")
 
+function toggleDarkMode() {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  toggleModeBtn.textContent = isDark ? "Light Mode" : "Dark Mode";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+}
+
 // - Step 10: Load the saved theme from localStorage
 // - Define a function called loadTheme()
 // Inside the function:
 // - Use getItem("theme") from localStorage
 // - If it’s "dark", add the "dark" class to body and update toggle button text
 
+function loadTheme() {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    toggleModeBtn.textContent = "Light Mode";
+  } else {
+    console.log("Light Mode is active - Default theme is active");
+  }
+}
+
 // - Step 11: Add event listeners to buttons and form
 // - Add the following event listeners:
-// - songForm "submit" → addSong
+// - form "submit" → addSong
 // - filterMoodSelect "change" → filterPlaylist
 // - shuffleBtn "click" → shufflePlaylist
 // - toggleModeBtn "click" → toggleDarkMode
+
+form.addEventListener("submit", addSong);
+filterMood.addEventListener("change", filterPlaylist);
+shuffleBtn.addEventListener("click", shufflePlaylist);
+toggleModeBtn.addEventListener("click", toggleDarkMode);
 
 // - Step 12: Initialize the app
 // - Call the following functions:
 // - loadPlaylist()
 // - renderPlaylist(playlist)
 // - loadTheme()
+
+loadPlaylist();
+renderPlaylist(playlist);
+loadTheme();
