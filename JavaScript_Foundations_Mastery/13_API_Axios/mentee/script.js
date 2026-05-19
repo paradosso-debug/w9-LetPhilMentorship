@@ -103,6 +103,7 @@ catFactBtn.addEventListener("click", async () => {
 //
 // STEP 6: Add a "click" event listener to spaceBtn.
 //         Mark the listener function as async.
+
 //
 // STEP 7: Inside the async code:
 //         - Set spaceDisplay.innerHTML to "Loading space photo... 🚀".
@@ -136,3 +137,32 @@ catFactBtn.addEventListener("click", async () => {
 //             * Log the error.
 //             * Set spaceDisplay.textContent to:
 //               "Could not load space photo. Try again later."
+
+spaceBtn.addEventListener("click", async () => {
+  spaceDisplay.innerHTML = "Loading space photo/video... 🚀";
+  try {
+    const response = await axios.get(
+      "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&count=1",
+    );
+    const data = response.data[0];
+    console.log("data");
+
+    if (data.media_type === "image") {
+      spaceDisplay.innerHTML = `
+      <h3>${data.title}</h3>
+      <img src="${data.url}" alt="${data.title}"
+      style="max-width: 100%; border-radius: 12px;"
+      />
+      <p>${data.explanation}</p>
+      
+      `;
+    } else {
+      spaceDisplay.innerHTML = `
+      <a href="${data.url}" target="_blank">Open Space Video</a> 
+       `;
+    }
+  } catch (error) {
+    console.error(error);
+    spaceDisplay.textContent = "Could not load space photo. Try again later.";
+  }
+});
