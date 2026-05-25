@@ -155,6 +155,18 @@ propsTask2Btn.addEventListener("click", () => {
 // - The object you pass in MUST still have a key named "text".
 // - Destructuring does not change the object — it changes how we read it.
 //
+function createWelcomeMessageDestructured({ text }) {
+  return "Welcome" + text;
+}
+
+destructTask1Btn.addEventListener("click", () => {
+  const messageProps = {
+    text: "Destructuring unlocked ✅",
+  };
+  const result = createWelcomeMessageDestructured(messageProps);
+  destructTask1Display.textContent = result;
+});
+
 // ==============================================
 // STEP 5 – DESTRUCTURING MINI TASK 2 (PRODUCT CARD)
 // ==============================================
@@ -195,3 +207,26 @@ propsTask2Btn.addEventListener("click", () => {
 // CHECKPOINTS:
 // - If values show as undefined, your object keys do not match.
 // - If the card doesn’t show, console.log the HTML string before rendering.
+
+function createProductCard({ title, price, stock }) {
+  const priceText = "$" + price.toFixed(2);
+
+  let stockMessage = stock === 0 ? "Out of stock" : `In stock ${stock}`;
+
+  let stockClass = stock === 0 ? "out" : "in";
+
+  return `
+              <article class="product-card">
+                <h3 class="product-title">${title}</h3>
+                <p class="product-price">${priceText}</p>
+                <p class="product-stock ${stockClass}">${stockMessage}</p>
+              </article>
+            `;
+}
+
+destructTask2Btn.addEventListener("click", () => {
+  const product = { title: "Wireless Headphones", price: 59.99, stock: 12 };
+  const card_html = createProductCard(product);
+  destructTask2Container.innerHTML = card_html;
+  statusText.textContent = "Card rendered using destructuring ✅";
+});
